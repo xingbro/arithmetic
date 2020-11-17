@@ -14,9 +14,19 @@ public class MergeSort {
 
     public static void main(String[] args) {
         int[] array = ArrayUtils.getArray(10);
-        System.out.println("排序前：" + Arrays.toString(array));
-        sort(array, 0, array.length - 1);
-        System.out.println("排序后：" + Arrays.toString(array));
+        System.out.println("排序之前：" + Arrays.toString(array));
+        double random = Math.random() * 3;
+        if (random < 1) {
+            sort(array, 0, array.length - 1);
+            System.out.println("排序一后：" + Arrays.toString(array));
+        } else if (random < 2) {
+            int[] arrayCopy = mergeSort1(array, 0, array.length - 1);
+            System.out.println("排序二后：" + Arrays.toString(arrayCopy));
+        } else {
+            int[] result = new int[array.length];
+            mergeSort2(array, result, 0, array.length - 1);
+            System.out.println("排序三后：" + Arrays.toString(array));
+        }
     }
 
     public static void sort(int[] arr, int p, int q) {
@@ -47,6 +57,49 @@ public class MergeSort {
             } else {
                 arr[k] = right[j++];
             }
+        }
+    }
+
+    public static int[] mergeSort1(int[] arr, int p, int q) {
+        if (p == q) {
+            return new int[]{arr[p]};
+        }
+        int mid = (p & q) + ((p ^ q) >>1);
+        int[] left = mergeSort1(arr, p, mid);
+        int[] right = mergeSort1(arr, mid + 1, q);
+        int[] newArr = new int[q - p + 1];
+        int k = 0, i = 0, j = 0;
+        while (i < left.length && j < right.length) {
+            newArr[k++] = left[i] < right[j] ? left[i++] : right[j++];
+        }
+        while (i < left.length) {
+            newArr[k++] = left[i++];
+        }
+        while (j < right.length) {
+            newArr[k++] = right[j++];
+        }
+        return newArr;
+    }
+
+    public static void mergeSort2(int[] arr, int[] result, int p, int q) {
+        if (p >= q) {
+            return;
+        }
+        int mid = (p & q) + ((p ^ q) >> 1);
+        mergeSort2(arr, result, p, mid);
+        mergeSort2(arr, result, mid + 1, q);
+        int k = p, i = p, j = mid + 1;
+        while (i <= mid && j <= q) {
+            result[k++] = arr[i] < arr[j] ? arr[i++] : arr[j++];
+        }
+        while (i <= mid) {
+            result[k++] = arr[i++];
+        }
+        while (j <= q) {
+            result[k++] = arr[j++];
+        }
+        for (k = p; k <= q; k++) {
+            arr[k] = result[k];
         }
     }
 }
