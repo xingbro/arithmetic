@@ -21,7 +21,7 @@ public class MergeSort {
 
     public static void sort(int[] arr, int p, int q) {
         if (p < q) {
-            int mid = p + q >> 1;
+            int mid = (p & q) + ((p ^ q) >> 1);
             sort(arr, p, mid);
             sort(arr, mid + 1, q);
             merge(arr, p, mid, q);

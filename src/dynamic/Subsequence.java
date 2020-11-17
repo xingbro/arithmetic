@@ -33,7 +33,7 @@ public class Subsequence {
         for (int num : nums) {
             int i = 0, j = size;
             while (i != j) {
-                int mid = i + j >> 1;
+                int mid = (i & j) + ((i ^ j) >> 1);
                 if (tails[mid] < num) {
                     i = mid + 1;
                 } else {
@@ -60,7 +60,8 @@ public class Subsequence {
                     max = Math.max(max, dp[j]);
                 }
             }
-            dp[i] = Math.max(maxValue, dp[i]);
+            dp[i] = max + 1;
+            maxValue = Math.max(maxValue, dp[i]);
         }
         return maxValue;
     }
