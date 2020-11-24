@@ -6,34 +6,27 @@ import java.util.List;
 
 /**
  * @Author lx
- * @Date 2020/9/30 10:43
+ * @Date 2020/11/24 12:23
  * @Version 1.0
  */
-public class BinarySearchTree {
-
-    public BinarySearchTree left;
-
-    public BinarySearchTree right;
-
-    public int val;
-
-    public BinarySearchTree(int val) {
-        this.val = val;
-    }
+public class Traversal {
 
     /**
      * 前序遍历
      * 辅助栈
+     *
      * @param root
      * @return
      */
-    public List<Integer> preorderTraversal1(BinarySearchTree root) {
+    public List<Integer> preorderTraversal1(BinaryTree root) {
         List<Integer> list = new ArrayList<>();
-        if (root == null) {return list;}
-        LinkedList<BinarySearchTree> stack = new LinkedList<>();
+        if (root == null) {
+            return list;
+        }
+        LinkedList<BinaryTree> stack = new LinkedList<>();
         stack.add(root);
         while (stack.size() > 0) {
-            BinarySearchTree last = stack.pollLast();
+            BinaryTree last = stack.pollLast();
             list.add(last.val);
             if (last.right != null) {
                 stack.add(last.right);
@@ -48,10 +41,11 @@ public class BinarySearchTree {
     /**
      * 前序遍历
      * 递归
+     *
      * @param root
      * @return
      */
-    public List<Integer> preorderTraversal2(List<Integer> list, BinarySearchTree root) {
+    public List<Integer> preorderTraversal2(List<Integer> list, BinaryTree root) {
         if (root == null) {
             return list;
         }
@@ -68,22 +62,23 @@ public class BinarySearchTree {
     /**
      * 中序遍历
      * 辅助栈
+     *
      * @param root
      * @return
      */
-    public List<Integer> inorderTraversal1(BinarySearchTree root) {
+    public List<Integer> inorderTraversal1(BinaryTree root) {
         List<Integer> list = new ArrayList<>();
         if (root == null) {
             return list;
         }
-        LinkedList<BinarySearchTree> stack = new LinkedList<>();
-        BinarySearchTree cur = root;
+        LinkedList<BinaryTree> stack = new LinkedList<>();
+        BinaryTree cur = root;
         while (stack.size() > 0 || cur != null) {
             while (cur != null) {
                 stack.add(cur);
                 cur = cur.left;
             }
-            BinarySearchTree last = stack.pollLast();
+            BinaryTree last = stack.pollLast();
             list.add(last.val);
             cur = last.right;
         }
@@ -93,11 +88,12 @@ public class BinarySearchTree {
     /**
      * 中序遍历
      * 递归
+     *
      * @param list
      * @param root
      * @return
      */
-    public List<Integer> inorderTraversal2(List<Integer> list, BinarySearchTree root) {
+    public List<Integer> inorderTraversal2(List<Integer> list, BinaryTree root) {
         if (root == null) {
             return list;
         }
@@ -114,19 +110,20 @@ public class BinarySearchTree {
     /**
      * 后序遍历
      * 辅助栈
+     *
      * @param root
      * @return
      */
-    public List<Integer> postorderTraversal1(BinarySearchTree root) {
+    public List<Integer> postorderTraversal1(BinaryTree root) {
         List<Integer> list = new ArrayList<>();
         if (root == null) {
             return list;
         }
-        LinkedList<BinarySearchTree> stack1 = new LinkedList<>();
-        LinkedList<BinarySearchTree> stack2 = new LinkedList<>();
+        LinkedList<BinaryTree> stack1 = new LinkedList<>();
+        LinkedList<BinaryTree> stack2 = new LinkedList<>();
         stack1.add(root);
         while (stack1.size() > 0) {
-            BinarySearchTree last = stack1.pollLast();
+            BinaryTree last = stack1.pollLast();
             stack2.add(last);
             if (last.left != null) {
                 stack1.add(last.left);
@@ -144,10 +141,11 @@ public class BinarySearchTree {
     /**
      * 后序遍历
      * 递归
+     *
      * @param root
      * @return
      */
-    public List<Integer> postorderTraversal2(List<Integer> list, BinarySearchTree root) {
+    public List<Integer> postorderTraversal2(List<Integer> list, BinaryTree root) {
         if (root == null) {
             return list;
         }
@@ -163,21 +161,22 @@ public class BinarySearchTree {
 
     /**
      * 层序遍历
+     *
      * @param root
      * @return
      */
-    public List<List<Integer>> levelOrder(BinarySearchTree root) {
+    public List<List<Integer>> levelOrder(BinaryTree root) {
         List<List<Integer>> lists = new ArrayList<>();
         if (root == null) {
             return lists;
         }
-        LinkedList<BinarySearchTree> queue = new LinkedList<>();
+        LinkedList<BinaryTree> queue = new LinkedList<>();
         queue.add(root);
         int size;
         while ((size = queue.size()) > 0) {
             List<Integer> list = new ArrayList<>();
             for (int i = 0; i < size; i++) {
-                BinarySearchTree first = queue.pollFirst();
+                BinaryTree first = queue.pollFirst();
                 list.add(first.val);
                 if (first.left != null) {
                     queue.add(first.left);
@@ -190,5 +189,4 @@ public class BinarySearchTree {
         }
         return lists;
     }
-
 }
