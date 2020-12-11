@@ -25,12 +25,17 @@ public class SwapNumbers {
      *      a == c ^ b;
      *      b == c ^ a;
      * ③由②可知两个变量可以存储三个数的信息
+     * 注：如果两个下标相同，将会把此下标位置值变成 0
+     *
      * @param nums
      * @param i
      * @param j
      * @return
      */
     public static int[] swapNumbers(int[] nums, int i, int j) {
+        if (i == j) {
+            return nums;
+        }
         nums[i] ^= nums[j];
         nums[j] ^= nums[i];
         nums[i] ^= nums[j];
