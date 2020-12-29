@@ -1,7 +1,5 @@
 package bit;
 
-import java.util.Random;
-
 /**
  * @Author lx
  * @Date 2020/11/18 13:15
