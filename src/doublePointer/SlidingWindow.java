@@ -50,4 +50,55 @@ public class SlidingWindow {
 
         return right - left;
     }
+
+    /**
+     * 正整数数组，元素大小不超过数组长度
+     * 找到这样的子数组个数，子数组中不同元素恰好为 k 个
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int subarraysWithKDistinct(int[] nums, int k) {
+        /**
+         * 1.分析恰好为 k 个，指针单向移动，不能完全数清楚
+         * 2.做此题之前需要先了解，最多为 k 个的情况如何计算
+         * 问题拆解为熟悉的问题 +1
+         */
+        if (nums == null || nums.length < 1) {
+            return 0;
+        }
+        return maxNum(nums, k) - maxNum(nums, k - 1);
+    }
+
+    /**
+     * 条件同上
+     * 找到这样子数组的个数，子数组中不同元素个数最多为 k
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    private int maxNum(int[] nums, int k) {
+        /**
+         * 1.使用数组计数（原数据大小范围有限，这个计数数组下标范围能很好的包含这个范围）
+         * 2.每次移动指针对于结果的贡献要明确，所有指针移动的结果加一起，刚好能完成全部
+         */
+        int res = 0;
+        int left = 0, right = 0, count = 0;
+        int len = nums.length;
+        int[] numCount = new int[len + 1];
+        while (right < len) {
+            if (numCount[nums[right++]]++ == 0) {
+                ++count;
+            }
+            while (count > k) {
+                if (--numCount[nums[left++]] == 0) {
+                    --count;
+                }
+            }
+            res += right - left;
+        }
+        return res;
+    }
 }
