@@ -1,5 +1,8 @@
 package doublePointer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 滑动窗口
  * 是一种典型的 线性时间 解决问题的思维模式
@@ -100,5 +103,114 @@ public class SlidingWindow {
             res += right - left;
         }
         return res;
+    }
+
+    /**
+     * 数组 nums 中元素范围[1, n]，其中 n 为数组长度
+     * 有的元素只出现一次，有的出现两次
+     * 所以[1, n]还有一些没出现的，找到这些没出现的
+     *
+     * @param nums
+     * @return
+     */
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        /**
+         * [1] 模的一个应用，通过元素 + 模长的值，来标记是否被处理过
+         * [2] 使用这个元素时候先对模长取模
+         * [3] 使用这种方法目的在于，节约空间，但是改变了原来的数组
+         *
+         * 应用到本题
+         * 有一点转换，就是下标和数值，遍历时候一定是看数值
+         * 但是改变的是，下标为数值对应的值，查看时候看问题数值对应的下标
+         */
+        List<Integer> list = new ArrayList<>();
+        if (nums == null || nums.length < 1) {
+            return list;
+        }
+        int len = nums.length;
+        for (int i = 0; i < len; ++i) {
+            nums[(nums[i] - 1) % len] += len;
+        }
+        for (int i = 0; i < len; ++i) {
+            if (nums[i] <= len) {
+                list.add(i + 1);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 数组 nums 中只有 0 或者 1
+     * 想要把数组中的元素全变成 1
+     * 通过翻转（每次翻转是将，长度为 k 的子数组中，0 和 1 互换）
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int minkBitFlips1(int[] nums, int k) {
+        /**
+         * 此题元素只有 0 和 1，相互转换的方式有 ^= 1
+         * 每次新元素进入窗口，它必然参加了前边的翻转（这里依据，每个窗口至多翻转一次，得到最小翻转次数）
+         * 为了保证翻转次数准确，这里先处理出去的，出去一个它进来时候翻转了的，就要减少一次翻转
+         * 所以这里定义变量时候，注意有1.标记元素是否进入窗口时候翻转过，2.统计目前翻转的次数（由于只有 0 和 1，只统计奇偶即可）
+         *
+         */
+        if (nums == null || nums.length < 1) {
+            return 0;
+        }
+        int n = nums.length;
+        int ans = 0, revCnt = 0;
+        for (int i = 0; i < n; ++i) {
+            // [1] 先处理要滑出窗口的
+            if (i >= k && nums[i - k] >= 2) {
+                revCnt ^= 1;
+                nums[i - k] -= 2;
+            }
+            // [2] 再处理滑入窗口的，因为只统计了翻转次数的奇偶
+            if (nums[i] == revCnt) {
+                // 这个元素需要翻转，但是没有足够的窗口了
+                if (i + k > n) {
+                    return -1;
+                }
+                ++ans;
+                revCnt ^= 1;
+                nums[i] += 2;
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 上述问题的解法的前一个版本，使用到了差分数组
+     *
+     * 前一个解法，只考虑翻转次数的奇偶，如果想具体统计翻转次数，要使用一个长度为 k 的数组来记录，
+     * 每次翻转，数组内的全部元素 +1，使用差分数组，就可以避免将 k 个全加一遍
+     *
+     * 差分数组，用来记录「主数组」的某一项与前一项的差值，第一项记录的是与 0 的差值
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int minkBitFlips2(int[] nums, int k) {
+        int n = nums.length;
+        // n 有使用价值？没有，避免迭代部分代码特殊处理；
+        // 翻转次数的数组差值，因为是从左向右遍历，所以前边翻转了没进来的差值就小了 1
+        int[] diff = new int[n + 1];
+        int ans = 0, revCnt = 0;
+        for (int i = 0; i < n; ++i) {
+            // revCnt 记录了当前元素经过的翻转次数，这里只是加的相比前一个差了多少
+            revCnt += diff[i];
+            if (((nums[i] + revCnt) & 1) == 0) {
+                if (i + k > n) {
+                    return -1;
+                }
+                ++ans;
+                ++revCnt;
+                --diff[i + k];
+            }
+        }
+        return ans;
     }
 }
