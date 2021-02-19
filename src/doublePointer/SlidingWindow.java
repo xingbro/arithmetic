@@ -213,4 +213,51 @@ public class SlidingWindow {
         }
         return ans;
     }
+
+    /**
+     * 数组中 k 个连续子数组的最大值
+     *
+     * 此题解运用的「知识」
+     * 1.《怎样解题》中提到，有没有一个和目标问题差不多（子问题或相似熟悉或简化等）的问题
+     * 2.O(N) 不是扫描一遍，O(N) 不是扫描一遍，O(N) 不是扫描一遍
+     * 3.单向扫描解决一部分问题遗漏一部分问题，反向扫描解决和遗漏互补非问题
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        // [1] 判空及特殊值判断
+        if (nums == null || nums.length < 1) {
+            return new int[0];
+        }
+        // [2] 定义变量
+        int len = nums.length;
+        int[] pref = new int[len];
+        int[] suff = new int[len];
+        int[] result = new int[len - k + 1];
+        // [3] 正向扫描，同组中左边的元素中最大值
+        for (int i = 0; i < len; ++i) {
+            if (i % k == 0) {
+                pref[i] = nums[i];
+            } else {
+                pref[i] = Math.max(pref[i - 1], nums[i]);
+            }
+        }
+        // [4] 反向扫描，同组中右边元素的最大值
+        suff[len - 1] = nums[len - 1];
+        for (int i = len - 2; i >= 0; --i) {
+            // 分段结束的标志是，下一个又能整除了
+            if ((i + 1) % k == 0) {
+                suff[i] = nums[i];
+            } else {
+                suff[i] = Math.max(suff[i + 1], nums[i]);
+            }
+        }
+        // [5] 找到 [i, i + k - 1] 内的最大值
+        for (int i = 0; i < len - k + 1; ++i) {
+            result[i] = Math.max(suff[i], pref[i + k - 1]);
+        }
+        return result;
+    }
 }
