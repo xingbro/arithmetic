@@ -1,13 +1,14 @@
 package backtrack;
 
-import sort.ArrayUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * 全排列
+ *
+ * 回溯算法：是一种深度优先算法，枚举出所有的情况
+ *
  * @Author lx
  * @Date 2020/9/27 10:30
  * @Version 1.0
