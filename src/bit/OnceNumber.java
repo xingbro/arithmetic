@@ -32,6 +32,24 @@ public class OnceNumber {
      * @return
      */
     public static int singleNumber2(int[] nums) {
+        /**
+         * 这个单看某一位
+         * 比如 0000 0010
+         *
+         *      0000 0010
+         *      0000 0000
+         *      two one 01
+         *
+         *      0000 0000
+         *      0000 0010
+         *      two one 10
+         *
+         *      0000 0000
+         *      0000 0000
+         *      two one 00
+         *
+         * 重要的是不同状态之间的转换
+         */
         int one = 0, two = 0;
         for (int num : nums) {
             one = ~two & (one ^ num);
