@@ -60,10 +60,6 @@ public class Basics {
          */
         int m = (int) (Math.random() * 100);
         int mLastBit1 = m & -m;
-        if ((n & mLastBit1) == 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return (n & mLastBit1) != 0;
     }
 }
